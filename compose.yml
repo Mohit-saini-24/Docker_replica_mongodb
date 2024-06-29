@@ -1,0 +1,52 @@
+services:
+  mongo1:
+    image: mongo:latest
+    container_name: mongo1
+    hostname: mongo1
+    ports:
+      - "51901:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - ${PWD}/rs_keyfile:/etc/mongodb/pki/keyfile
+      - "./mongo1_data:/data/db"
+    networks: 
+      - mongo-net
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--keyFile", "/etc/mongodb/pki/keyfile"]
+
+  mongo2:
+    image: mongo:latest
+    container_name: mongo2
+    hostname: mongo2
+    ports:
+      - "51902:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - ${PWD}/rs_keyfile:/etc/mongodb/pki/keyfile
+      - "./mongo2_data:/data/db"
+    networks:
+      - mongo-net
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--keyFile", "/etc/mongodb/pki/keyfile"]
+
+  mongo3:
+    image: mongo:latest
+    container_name: mongo3
+    hostname: mongo3
+    ports:
+      - "51903:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - ${PWD}/rs_keyfile:/etc/mongodb/pki/keyfile
+      - "./mongo3_data:/data/db"
+    networks:
+      - mongo-net
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--keyFile", "/etc/mongodb/pki/keyfile"]
+
+networks:
+  mongo-net:
+    driver: bridge
